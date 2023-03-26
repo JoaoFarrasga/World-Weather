@@ -60,28 +60,42 @@ const showWeatherData = async (city) => {
 
     switch (data.weather[0].description) {
 
-        case 'clear':
-            image.src = 'Images/clear.png';
+        case 'clear sky':
+            image.src = 'Images/clear_sky.png';
+            break;
+
+        case 'few clouds':
+            image.src = 'Images/few_clouds.png';
+            break;
+
+        case 'scattered clouds':
+            image.src = 'Images/scattered_clouds.png';
+            break;
+
+        case 'broken clouds':
+            image.src = 'Images/broken_clouds.png';
+            break;
+
+        case 'shower rain':
+            image.src = 'Images/shower_rain.png';
             break;
 
         case 'rain':
             image.src = 'Images/rain.png';
             break;
 
+        case 'thunderstorm':
+            image.src = 'Images/thunderstorm.png';
+            break;
+
         case 'snow':
             image.src = 'Images/snow.png';
             break;
 
-        case 'overcast clouds':
-        case 'few clouds':
-        case 'clouds':
-            image.src = 'Images/cloud.png';
-            break;
-
-        case 'haze':
+        case 'mist':
             image.src = 'Images/mist.png';
             break;
-        
+
         default:
             image.src = 'Images/404.png';
     }
