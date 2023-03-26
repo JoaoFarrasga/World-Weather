@@ -4,7 +4,7 @@ const weatherBox = document.querySelector('.weather-box');
 const weatherDetails = document.querySelector('.weather-details');
 const error404 = document.querySelector('.not-found');
 
-const APIKey = '7ece734db73e21dd84af8c64ad909415';
+const APIKey = 'Your API Key here';
 
 const getCoordData = async (city) => {
 
@@ -100,7 +100,7 @@ const showWeatherData = async (city) => {
             image.src = 'Images/404.png';
     }
 
-    temperature.innerHTML = parseInt(data.main.temp);
+    temperature.innerHTML = `${parseInt(data.main.temp)}ºC`;
     description.innerText = data.weather[0].description;
     humidity.innerText = `${data.main.humidity}%`;
     wind_speed.innerText = `${data.wind.speed}km/h`;
