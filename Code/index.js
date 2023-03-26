@@ -12,42 +12,31 @@ const getCoordData = async (city) => {
 
     const res = await fetch(apiGeolocationurl);
     const data = await res.json();
+    
+    if (data.length === 0) {
+        throw new Error(`City '${city}' not found`);
+    }
 
-    return data;
+    const { lat, lon } = data[0];
+
+    return { lat, lon };
 };
 
 const getWeatherData = async (city) => {
 
-    const data = await getCoordData(city)
+    const { lat, lon} = await getCoordData(city)
 
-    if (data.cod === "404") {
-
-        container.style.height = '400px';
-        weatherBox.style.display = 'none';
-        weatherDetails.style.display = 'none';
-        error404.style.display = 'block';
-        error404.classList.add('fadeIn');
-        return;
-    }
-
-    error404.style.display = 'none';
-    error404.classList.remove('fadeIn');
-
-    var lat, lon;
-
-    lat = data.lat;
-    lon = data.lon;
-
-    const apiWeatherurl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}`;
+    const apiWeatherurl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`;
 
     const res = await fetch(apiWeatherurl);
-    const data2 = await res.json();
+    const data = await res.json();
 
-    return data2;
+    return data;
+
 }
 
 const showWeatherData = async (city) => {
-  
+
     const data = await getWeatherData(city);
 
     if (data.cod === "404") {
@@ -63,36 +52,38 @@ const showWeatherData = async (city) => {
     error404.style.display = 'none';
     error404.classList.remove('fadeIn');
 
+    const image = document.querySelector('.weather-box img');
     const temperature = document.querySelector('.weather-box .temperature');
     const description = document.querySelector('.weather-box .description');
     const humidity = document.querySelector('.weather-details .humidity span');
     const wind_speed = document.querySelector('.weather-details .wind span');
 
-    switch (json.weather[0].main) {
+    switch (data.weather[0].description) {
 
-        case 'Clear':
+        case 'clear':
             image.src = 'Images/clear.png';
             break;
 
-        case 'Rain':
+        case 'rain':
             image.src = 'Images/rain.png';
             break;
 
-        case 'Snow':
+        case 'snow':
             image.src = 'Images/snow.png';
             break;
 
-
-        case 'Clouds':
+        case 'overcast clouds':
+        case 'few clouds':
+        case 'clouds':
             image.src = 'Images/cloud.png';
             break;
 
-        case 'Haze':
+        case 'haze':
             image.src = 'Images/mist.png';
             break;
         
         default:
-            image.src = '';
+            image.src = 'Images/404.png';
     }
 
     temperature.innerHTML = parseInt(data.main.temp);
@@ -108,9 +99,11 @@ const showWeatherData = async (city) => {
 }
 
 search.addEventListener('click', async (e) => {
-    if (e.code === "Enter") {
-    const city = e.target.value;
-    
+    e.preventDefault();
+
+    const city = document.querySelector('.search-box input').value;
+
+    console.log(city);
+
     showWeatherData(city);
-    }
 });
